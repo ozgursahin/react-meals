@@ -1,6 +1,6 @@
 # React Meals Demo Project
 
-Version 1.0
+Version 1.0 - [Demo](https://ozgursahin.github.io/react-meals/)
 
 ## Getting Started with Create React App
 
