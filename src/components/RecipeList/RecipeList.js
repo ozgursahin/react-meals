@@ -8,7 +8,7 @@ import RecipeCard from "../RecipeCard/RecipeCard";
 import RecipeDetail from "../RecipeDetail/RecipeDetail";
 import "./RecipeList.scss";
 
-import allRecipes from "../../recipe-db/enriched-recipes.json";
+import allRecipes from "../../recipe-db/recipes.json";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
