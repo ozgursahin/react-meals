@@ -1,0 +1,82 @@
+$base-color: #963d3d;
+$gray-bg: #f7f7f8;
+$filter-panel-bg: #4c4f61;
+$filter-panel-header-bg: darken($filter-panel-bg, 20%);
+$left-panel-width: 300px;
+$header-height: 70px;
+
+.list-explorer {
+	.recipe-filters {
+		max-width: $left-panel-width;
+		min-width: $left-panel-width;
+		color: white;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+
+		.header {
+			display: flex;
+			justify-content: space-between;
+			padding: 0.5em 1em;
+			align-items: center;
+			background: $filter-panel-header-bg;
+			position: sticky;
+			top: 0px;
+			user-select: none;
+
+			.label {
+				font-size: 200%;
+				font-family: "Teko";
+			}
+
+			.close-icon {
+				cursor: pointer;
+			}
+		}
+
+		.filters {
+			display: flex;
+			flex-direction: column;
+			height: 100%;
+			overflow: auto;
+
+			.form-select-label {
+				font-size: 130%;
+				color: #e2e2e2;
+			}
+
+			.nutrient-slider-container {
+				padding: 1em 2em;
+				background: #1f2028;
+				margin: 1em 1em;
+				border-radius: 3px;
+	
+				.MuiSlider-root {
+					color: lighten($base-color, 10%);
+				}
+			}
+	
+			.MuiFormLabel-root.Mui-focused {
+				color: white;
+			}
+	
+			.MuiInput-underline:after {
+				border-bottom-color: white;
+			}
+		}
+
+		.buttons {
+			position: sticky;
+			bottom: $header-height;
+			margin-top: $header-height;
+			background: #1f2028;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			button {
+				margin: 0.5em;
+			}
+		}
+	}
+}

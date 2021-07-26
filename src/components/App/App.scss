@@ -1,0 +1,103 @@
+@font-face {
+	font-family: "Teko";
+	src: local("Teko"), url(../../fonts/Teko-Regular.ttf) format("truetype");
+	/* other formats include: 'woff2', 'truetype, 'opentype',
+							  'embedded-opentype', and 'svg' */
+}
+
+@font-face {
+	font-family: "Exo";
+	src: local("Exo"), url(../../fonts/Exo-Variable.ttf) format("truetype");
+	/* other formats include: 'woff2', 'truetype, 'opentype',
+							  'embedded-opentype', and 'svg' */
+}
+
+$base-color: #963d3d;
+$header-color: $base-color;
+$footer-color: darken($base-color, 20%);
+$header-height: 70px;
+
+.App {
+	height: 100%;
+	text-align: center;
+
+	.App-logo {
+		height: 1.3em;
+		pointer-events: none;
+		filter: sepia(1) hue-rotate(340deg);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.App-logo {
+			animation: App-logo-spin infinite 20s linear;
+		}
+	}
+
+	@keyframes App-logo-spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	& > .header {
+		height: $header-height;
+		position: relative;
+		z-index: 1049;
+
+		.header-inner {
+			position: fixed;
+			top: 0;
+			height: $header-height;
+			width: 100%;
+			z-index: 2;
+			background: $header-color;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.logo {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-weight: bold;
+				font-size: 350%;
+				color: whitesmoke;
+				font-family: "Teko", monospace;
+				user-select: none;
+				position: absolute;
+				left: 0px;
+
+				& > span {
+					position: relative;
+					top: 2px;
+				}
+			}
+		}
+	}
+
+	& > .body {
+		height: 100%;
+	}
+
+	& > .footer {
+		min-height: 12em;
+		background-color: $footer-color;
+		color: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: bold;
+		font-size: large;
+	}
+}
+
+.d-block {
+	display: block;
+}
+
+.d-none {
+	display: none;
+}

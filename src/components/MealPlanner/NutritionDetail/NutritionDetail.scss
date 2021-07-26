@@ -1,0 +1,17 @@
+.nutrition-detail {
+	padding: 0.7em;
+
+	.MuiAccordionDetails-root {
+		padding: 0;
+	}
+
+	.nutrition-chart-container {
+		width: 100%;
+
+		.information {
+			display: flex;
+			align-items: center;
+			padding: 0em 0.5em 0.5em 0.5em;
+		}
+	}
+}

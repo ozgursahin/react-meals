@@ -1,0 +1,15 @@
+$filter-panel-bg: #4c4f61;
+$header-height: 70px;
+
+.list-explorer {
+	.side-panel-button {
+		margin-bottom: 1em;
+	}
+
+	.MuiDrawer-paper {
+		top: $header-height;
+		background-color: $filter-panel-bg;
+	}
+}
+
+

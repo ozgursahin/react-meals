@@ -1,0 +1,16 @@
+export const INGREDIENTS = [
+	"avocado",
+	"bananas",
+	"beef",
+	"pork",
+	"eggplant",
+	"tomatoes",
+	"sugar",
+	"shrimp",
+	"potatoes",
+	"onion",
+	"garlic",
+	"olives",
+	"mushrooms",
+	"fish",
+];

@@ -1,0 +1,38 @@
+$base-color: #963d3d;
+$gray-bg: #f7f7f8;
+$left-panel-width: 300px;
+$header-height: 70px;
+
+.forms-container {
+	.list-container {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: row;
+
+		.list-explorer {
+			max-width: $left-panel-width;
+			min-width: $left-panel-width;
+			padding: 1.3em;
+			background-color: $gray-bg;
+			position: relative;
+			position: fixed;
+			top: $header-height;
+			left: 0px;
+			height: 100%;
+		}
+
+		.list {
+			background-color: white;
+			padding-top: 1em;
+			overflow: hidden;
+			display: flex;
+			justify-content: center;
+			width: 100%;
+			margin-left: $left-panel-width;
+		}
+
+		.MuiGrid-item {
+			margin-bottom: 3em;
+		}
+	}
+}

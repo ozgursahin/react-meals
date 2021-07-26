@@ -1,0 +1,25 @@
+.shopping-item {
+	font-weight: bold;
+	font-family: 'EXO';
+	border: 1px solid lightgray;
+	margin: 0.25em 1.5em;
+	border-radius: 3px;
+	background-color: #963d3d;
+	padding: 5px 0px;
+	font-variant: all-petite-caps;
+	position: relative;
+
+	.remove-item {
+		position: absolute;
+		right: -5px;
+		top: -5px;
+		color: white;
+		display: none;
+	}
+
+	&:hover {
+		.remove-item {
+			display: block;
+		}
+	}
+}

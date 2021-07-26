@@ -1,0 +1,95 @@
+.recipe-details-dialog {
+	.dialog-title {
+		h4 {
+			font-family: Exo;
+		}
+	}
+
+	.recipe-details {
+		display: flex;
+		flex-direction: column;
+
+		.row {
+			display: flex;
+			align-items: center;
+			border-bottom: 1px solid lightgray;
+			margin-bottom: 1em;
+			padding-bottom: 1em;
+
+			&.center {
+				justify-content: center;
+			}
+		}
+
+		.recipe-image {
+			margin-left: 1em;
+			width: 400px;
+			height: 400px;
+
+			img {
+				border: 1px solid lightgray;
+				border-radius: 5px;
+				box-shadow: 0px 1px 3px #b3b3b3;
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.recipe-info {
+			padding: 9em;
+			
+			.quick-info {
+				display: flex;
+
+				.info {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					font-family: "Exo";
+					margin-right: 1em;
+					padding-right: 1em;
+					border-right: 1px solid black;
+
+					.info-value {
+						font-size: 350%;
+					}
+
+					.info-label {
+						font-size: 125%;
+					}
+
+					&:last-child {
+						margin-right: initial;
+						padding-right: initial;
+						border-right: initial;
+					}
+				}
+			}
+		}
+
+		.ingredients, .nutrients {
+			.title {
+				font-family: Exo;
+				font-size: 140%;
+				font-weight: bold;
+			}
+		}
+
+		.nutrients {
+			display: flex;
+			flex-direction: column;
+			overflow: auto;
+			position: relative;
+
+			.title {
+				position: sticky;
+				top: 0px;
+				left: 0px;
+			}
+
+			.nutrients-container {
+				display: flex;
+			}
+		}
+	}
+}
