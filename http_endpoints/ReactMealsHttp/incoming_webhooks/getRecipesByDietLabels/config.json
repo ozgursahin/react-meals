@@ -5,7 +5,7 @@
     "run_as_user_id_script_source": "",
     "can_evaluate": {},
     "options": {
-        "httpMethod": "GET",
+        "httpMethod": "POST",
         "secret": "reactmeals89",
         "validationMethod": "SECRET_AS_QUERY_PARAM"
     },
