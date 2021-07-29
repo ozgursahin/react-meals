@@ -1,6 +1,6 @@
 // This function is the webhook's request handler.
 exports = function(payload, response) {
-	const { dietLabels, startIndex, limit	} = payload.body;
+	const { dietLabels, startIndex, limit	} = EJSON.parse(payload.body.text());
 
 	if (!dietLabels || startIndex === undefined || limit === undefined) {
 		response.setStatusCode(400);
