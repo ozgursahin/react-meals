@@ -21,8 +21,8 @@ exports = function(payload, response) {
 			.find({
 				"recipe.dietLabels": { $all: dietLabels }
 			})
-			.skip(startIndex)
-			.limit(limit)
+			.skip(parseInt(startIndex))
+			.limit(parseInt(limit))
 			.toArray();
 			
 		response.setStatusCode(200);
