@@ -17,8 +17,6 @@ exports = function(payload, response) {
 			.skip(startIndex)
 			.limit(limit)
 			.toArray();
-			
-		response.setStatusCode(200);
 
 		return docs;
 	}
