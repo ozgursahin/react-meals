@@ -7,6 +7,10 @@
             "apply_when": {
                 "owner": "%%user.id"
             },
+            "fields": {
+                "_id": {},
+                "recipe": {}
+            },
             "read": true,
             "write": true,
             "insert": true,
@@ -17,6 +21,10 @@
         {
             "name": "non-owner",
             "apply_when": {},
+            "fields": {
+                "_id": {},
+                "recipe": {}
+            },
             "read": true,
             "write": false,
             "insert": false,
