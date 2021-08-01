@@ -31,12 +31,20 @@ exports = function(payload, response) {
 		  queryFilters.push({$and: ingredientFilters});
 		}
 		
+		let finalQuery;
+		
+		if (queryFilters.length == 0) {
+		  finalQuery = {};
+		} else {
+		  finalQuery = {$and: queryFilters};
+		}
+		
 		console.log(`queryFilters: ${JSON.stringify(queryFilters)}`);
 
 		// Querying a mongodb service:
 		const docs = context.services.get("mongodb-atlas")
 			.db("react-meals").collection("recipes")
-			.find({$and: queryFilters})
+			.find(finalQuery)
 			.skip(startIndex)
 			.limit(limit)
 			.toArray();
