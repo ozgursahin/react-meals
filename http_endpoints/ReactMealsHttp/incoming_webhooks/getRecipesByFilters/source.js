@@ -28,7 +28,10 @@ exports = function(payload, response) {
 		      ingredientFilters.push({ $expr: { $gt: [{ $toDouble: "$recipe.perServing.totalNutrients." + ingredientKey + ".quantity" }, ingredientAmounts[ingredientKey]] } })
 		    }
 		  });
-		  queryFilters.push({$and: ingredientFilters});
+		  
+		  if (ingredientFilters.length > 0) {
+		    queryFilters.push({$and: ingredientFilters});
+		  }
 		}
 		
 		let finalQuery;
