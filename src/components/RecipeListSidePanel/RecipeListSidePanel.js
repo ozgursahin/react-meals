@@ -9,7 +9,7 @@ import RecipeFilters from "../RecipeFilters/RecipeFilters";
 import ShoppingList from "../ShoppingList/ShoppingList";
 import MealPlanner from "../MealPlanner/MealPlanner";
 
-function RecipeListSidePanel({ allRecipes, recipeFiltersParams, shoppingListParams, mealPlannerParams }) {
+function RecipeListSidePanel({ recipeFiltersParams, shoppingListParams, mealPlannerParams }) {
 	const [recipeFilterDrawerState, setRecipeFilterDrawerState] = useState(false);
 	const [shoppingListDrawerState, setShoppingListDrawerState] = useState(false);
 	const [mealPlannerDrawerState, setMealPlannerDrawerState] = useState(false);
@@ -32,7 +32,7 @@ function RecipeListSidePanel({ allRecipes, recipeFiltersParams, shoppingListPara
 				onClick={() => setShoppingListDrawerState(true)}
 				startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
 			>
-				Shopping List
+				Shopping List {shoppingListParams.shoppingList.length ? <>({shoppingListParams.shoppingList.length})</> : null}
 			</GreenButton>
 
 			<DarkRedButton
@@ -42,7 +42,7 @@ function RecipeListSidePanel({ allRecipes, recipeFiltersParams, shoppingListPara
 				onClick={() => setMealPlannerDrawerState(true)}
 				startIcon={<ListAltIcon></ListAltIcon>}
 			>
-				Meal Planner
+				Meal Planner {mealPlannerParams.mealPlan.length ? <>({mealPlannerParams.mealPlan.length})</> : null}
 			</DarkRedButton>
 
 			<LightBlueButton
@@ -55,7 +55,7 @@ function RecipeListSidePanel({ allRecipes, recipeFiltersParams, shoppingListPara
 				Filter Recipes
 			</LightBlueButton>
 
-			<RecipeFilters allRecipes={allRecipes} stateParams={recipeFiltersParams}></RecipeFilters>
+			<RecipeFilters stateParams={recipeFiltersParams}></RecipeFilters>
 
 			<ShoppingList stateParams={shoppingListParams}></ShoppingList>
 

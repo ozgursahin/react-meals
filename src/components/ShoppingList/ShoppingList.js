@@ -4,6 +4,7 @@ import { GreenButton, RedButton } from "../UIComponents/Buttons/Buttons";
 import CloseIcon from "@material-ui/icons/Close";
 
 import ShoppingItem from "./ShoppingItem/ShoppingItem";
+import PdfExporter from "../UIComponents/PdfExporter/PdfExporter";
 import "./ShoppingList.scss";
 
 function ShoppingList({ stateParams }) {
@@ -14,7 +15,17 @@ function ShoppingList({ stateParams }) {
 	};
 
 	const itemRemoved = (item) => {
-		stateParams.setShoppingList(items.filter(shoppingItem => shoppingItem !== item));
+		stateParams.setShoppingList(items.filter((shoppingItem) => shoppingItem !== item));
+	};
+
+	const exportToPdf = () => {
+		let pdfLines = [];
+
+		items.forEach(shoppingItem => {
+			pdfLines.push("• " + shoppingItem);
+		});
+
+		PdfExporter.exportToPdf(pdfLines, "shoppingList", "Shopping List");
 	};
 
 	return (
@@ -53,8 +64,9 @@ function ShoppingList({ stateParams }) {
 						variant="contained"
 						color="primary"
 						disabled={items.length === 0}
+						onClick={exportToPdf}
 					>
-						Export
+						Export (PDF)
 					</GreenButton>
 				</div>
 			</div>

@@ -7,9 +7,7 @@ import "./ShoppingItem.scss";
 export default function ShoppingItem({ item, itemRemoved }) {
 	return (
 		<div className="shopping-item">
-			<span className="label">
-				{item}
-			</span>
+			<span className="label">{item}</span>
 
 			<IconButton
 				className="remove-item"

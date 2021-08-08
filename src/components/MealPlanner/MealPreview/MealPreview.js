@@ -1,6 +1,6 @@
 import { React, useState } from "react";
 import { IconButton } from "@material-ui/core";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import ImagePlaceholder from "../../UIComponents/ImagePlaceholder/ImagePlaceholder";
 
@@ -20,9 +20,14 @@ export default function MealPreview({ recipeObject, removeMeal }) {
 					onLoad={() => setRecipeImageLoaded(true)}
 				/>
 			</div>
-			<div className="recipe-label">{recipeObject.label}</div>
+			<div className="recipe-label" title={recipeObject.label}>{recipeObject.label}</div>
 
-			<IconButton className="remove-meal" aria-label="remove meal from plan" color="primary" onClick={() => removeMeal(recipeObject)}>
+			<IconButton
+				className="remove-meal"
+				aria-label="remove meal from plan"
+				color="primary"
+				onClick={() => removeMeal(recipeObject)}
+			>
 				<DeleteIcon />
 			</IconButton>
 		</div>

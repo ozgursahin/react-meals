@@ -1,9 +1,12 @@
-import React from "react";
+import { React, useState } from "react";
 import "./RecipeCard.scss";
 import { IconButton, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import TocIcon from "@material-ui/icons/Toc";
+import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
+
+import ImagePlaceholder from "../UIComponents/ImagePlaceholder/ImagePlaceholder";
 
 const IngredientTooltip = withStyles((theme) => ({
 	tooltip: {
@@ -12,6 +15,8 @@ const IngredientTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 function RecipeCard({ recipeObject, stateParams }) {
+	const [recipeImageLoaded, setRecipeImageLoaded] = useState(false);
+
 	const stopProp = (e) => {
 		e.stopPropagation();
 	};
@@ -21,10 +26,31 @@ function RecipeCard({ recipeObject, stateParams }) {
 		e.stopPropagation();
 	};
 
+	const addToShoppingList = (e) => {
+		stateParams.addToShoppingList(recipeObject.ingredients.map((ingredient) => ingredient.food));
+		e.stopPropagation();
+	};
+
 	return (
 		<div className="recipe-card">
 			<div className="quick-actions-container">
-				<IconButton className="quick-action-button meal-plan" aria-label="add to meal plan" color="primary" onClick={addToMealPlan}>
+				<IconButton
+					className="quick-action-button add-to-cart"
+					title="add items to shopping list"
+					aria-label="add items to shopping list"
+					color="primary"
+					onClick={addToShoppingList}
+				>
+					<AddShoppingCartIcon />
+				</IconButton>
+
+				<IconButton
+					className="quick-action-button meal-plan"
+					title="add to meal plan"
+					aria-label="add to meal plan"
+					color="primary"
+					onClick={addToMealPlan}
+				>
 					<ListAltIcon />
 				</IconButton>
 
@@ -39,7 +65,17 @@ function RecipeCard({ recipeObject, stateParams }) {
 					</IconButton>
 				</IngredientTooltip>
 			</div>
-			<img alt="recipe" src={recipeObject.image} />
+
+			<div className="recipe-image">
+				{!recipeImageLoaded && <ImagePlaceholder width="250" height="250" />}
+				<img
+					className={`${recipeImageLoaded ? "d-block" : "d-none"}`}
+					alt="recipe"
+					src={recipeObject.image}
+					onLoad={() => setRecipeImageLoaded(true)}
+				/>
+			</div>
+
 			<span className="label">{recipeObject.label}</span>
 			<a className="source" href={recipeObject.url} onClick={stopProp} rel="noreferrer" target="_blank">
 				<span>{recipeObject.source}</span>

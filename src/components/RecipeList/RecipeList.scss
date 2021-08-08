@@ -22,11 +22,39 @@ $header-height: 70px;
 		}
 
 		.list {
+			.list-not-loaded {
+				margin-top: -36px;
+			}
+
+			.recipe-loading-error {
+				background: #c34343;
+				color: white;
+				font-weight: bold;
+				margin: 0em 6em;
+				padding: 1em;
+				border-radius: 3px;
+				font-size: 110%;
+				font-family: "Exo";
+				border: 1px solid #cacaca;
+			}
+
+			.no-results-warning {
+				background: #fff5af;
+				color: black;
+				margin: 0em 6em;
+				padding: 1em;
+				border-radius: 3px;
+				font-size: 110%;
+				font-family: "Exo";
+				border: 1px solid #cacaca;
+			}
+
 			background-color: white;
 			padding-top: 1em;
 			overflow: hidden;
 			display: flex;
-			justify-content: center;
+			flex-direction: column;
+			justify-content: flex-start;
 			width: 100%;
 			margin-left: $left-panel-width;
 		}

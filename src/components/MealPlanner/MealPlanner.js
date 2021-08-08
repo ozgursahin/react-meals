@@ -5,6 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import NutritionDetail from "./NutritionDetail/NutritionDetail";
 import MealPreview from "./MealPreview/MealPreview";
+import PdfExporter from "../UIComponents/PdfExporter/PdfExporter";
 import "./MealPlanner.scss";
 
 export default function MealPlanner({ stateParams }) {
@@ -15,14 +16,26 @@ export default function MealPlanner({ stateParams }) {
 	};
 
 	const removeMeal = (meal) => {
-		stateParams.setMealPlan(items.filter(mealItem => {
-			return mealItem.source !== meal.source && mealItem.label !== meal.label;
-		}));
+		stateParams.setMealPlan(
+			items.filter((mealItem) => {
+				return mealItem.source !== meal.source && mealItem.label !== meal.label;
+			})
+		);
+	};
+
+	const exportToPdf = () => {
+		let pdfLines = [];
+
+		items.forEach(recipeObject => {
+			pdfLines.push("• " + recipeObject.label);
+		});
+
+		PdfExporter.exportToPdf(pdfLines, "mealPlan", "Meal Planner");
 	};
 
 	return (
 		<Drawer anchor="left" variant="persistent" open={stateParams.mealPlannerDrawerState}>
-			<div className="meal-planner">
+			<div className="meal-planner" id="meal-list">
 				<div className="header">
 					<span className="label">Meal Planner</span>
 					<CloseIcon
@@ -58,8 +71,9 @@ export default function MealPlanner({ stateParams }) {
 						variant="contained"
 						color="primary"
 						disabled={items.length === 0}
+						onClick={exportToPdf}
 					>
-						Export
+						Export (PDF)
 					</GreenButton>
 				</div>
 			</div>

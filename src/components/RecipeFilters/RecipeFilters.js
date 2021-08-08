@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function RecipeFilters({ allRecipes, stateParams }) {
+function RecipeFilters({ stateParams }) {
 	const classes = useStyles();
 	const theme = useTheme();
 
@@ -71,42 +71,26 @@ function RecipeFilters({ allRecipes, stateParams }) {
 		return `${value} µg`;
 	};
 
-	const filterRecipes = function () {
-		let filtered = allRecipes
-			.filter((recipe) => {
-				let healthLabels = recipe.recipe.healthLabels;
-				let allergenFilter = selectedAllergens.every((allergen) => healthLabels.includes(allergen));
-				return allergenFilter;
-			})
-			.filter((recipe) => {
-				let ingredients = recipe.recipe.ingredients.map((ingredient) => ingredient.food);
-				let dislikedIngredientsFilter = !dislikedIngredients.some((ingredient) =>
-					ingredients.includes(ingredient)
-				);
-				return dislikedIngredientsFilter;
-			})
-			.filter((recipe) => {
-				return recipe.recipe.perServing.totalNutrients["FE"].quantity > nutritionFilterIron;
-			})
-			.filter((recipe) => {
-				return recipe.recipe.perServing.totalNutrients["VITB12"].quantity > nutritionFilterVitB12;
-			});
+	const applyFilters = function () {
+		let filters = {
+			selectedAllergens: selectedAllergens,
+			dislikedIngredients: dislikedIngredients,
+			ingredientAmounts: {
+				FE: nutritionFilterIron,
+				VITB12: nutritionFilterVitB12,
+			},
+		};
 
-		stateParams.setFilteredRecipes(filtered);
-		stateParams.setRecipes([]);
-		stateParams.setHasMoreItems(true);
-		stateParams.setScrollerIndex(stateParams.scrollerIndex + 1);
+		stateParams.applyRecipeFilters(filters);
 	};
 
-	const clearRecipeFilters = function () {
+	const clearFilters = function () {
 		setSelectedAllergens([]);
 		setDislikedIngredients([]);
 		setNutritionFilterIron(0);
 		setNutritionFilterVitB12(0);
-		stateParams.setRecipes([]);
-		stateParams.setFilteredRecipes(allRecipes);
-		stateParams.setHasMoreItems(true);
-		stateParams.setScrollerIndex(stateParams.scrollerIndex + 1);
+
+		stateParams.applyRecipeFilters({});
 	};
 
 	return (
@@ -229,7 +213,7 @@ function RecipeFilters({ allRecipes, stateParams }) {
 						className="clear-button"
 						variant="contained"
 						color="primary"
-						onClick={() => clearRecipeFilters()}
+						onClick={() => clearFilters()}
 					>
 						Clear
 					</RedButton>
@@ -237,7 +221,7 @@ function RecipeFilters({ allRecipes, stateParams }) {
 						className="apply-button"
 						variant="contained"
 						color="primary"
-						onClick={() => filterRecipes()}
+						onClick={() => applyFilters()}
 					>
 						Apply
 					</GreenButton>

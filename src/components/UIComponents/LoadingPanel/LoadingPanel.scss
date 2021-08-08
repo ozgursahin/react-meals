@@ -1,0 +1,19 @@
+.loading-panel {
+	margin: 0px 7em 10px 7em;
+	text-transform: uppercase;
+
+	.loading-text {
+		font-weight: bold;
+	}
+
+	.progress-bar-container {
+		background: #963d3d;
+		padding: 10px;
+		border-radius: 3px;
+		margin-top: 10px;
+
+		.progress-bar {
+			background-color: white;
+		}
+	}
+}

@@ -50,16 +50,16 @@ $header-height: 70px;
 				background: #1f2028;
 				margin: 1em 1em;
 				border-radius: 3px;
-	
+
 				.MuiSlider-root {
 					color: lighten($base-color, 10%);
 				}
 			}
-	
+
 			.MuiFormLabel-root.Mui-focused {
 				color: white;
 			}
-	
+
 			.MuiInput-underline:after {
 				border-bottom-color: white;
 			}
