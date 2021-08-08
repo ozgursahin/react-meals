@@ -24,7 +24,7 @@ const PdfExporter = {
 		pdfFile.setFontSize(15);
 
 		lines.forEach((pdfLine) => {
-			if (lineIndex % PAGE_LIMIT == 0) {
+			if (lineIndex % PAGE_LIMIT === 0) {
 				pdfFile.addPage("a4", "p");
 				lineIndex = 1;
 			}

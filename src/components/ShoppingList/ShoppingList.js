@@ -4,7 +4,7 @@ import { GreenButton, RedButton } from "../UIComponents/Buttons/Buttons";
 import CloseIcon from "@material-ui/icons/Close";
 
 import ShoppingItem from "./ShoppingItem/ShoppingItem";
-import PdfExporter from "../UIComponents/PdfExporter/PdfExporter";
+import PdfExporter from "../../helpers/pdf-exporter/PdfExporter";
 import "./ShoppingList.scss";
 
 function ShoppingList({ stateParams }) {

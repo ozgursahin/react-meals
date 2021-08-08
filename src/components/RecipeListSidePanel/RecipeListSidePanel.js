@@ -32,7 +32,7 @@ function RecipeListSidePanel({ recipeFiltersParams, shoppingListParams, mealPlan
 				onClick={() => setShoppingListDrawerState(true)}
 				startIcon={<LocalGroceryStoreIcon></LocalGroceryStoreIcon>}
 			>
-				Shopping List {shoppingListParams.shoppingList.length ? <>({shoppingListParams.shoppingList.length})</> : null}
+				Shopping List
 			</GreenButton>
 
 			<DarkRedButton
@@ -42,7 +42,7 @@ function RecipeListSidePanel({ recipeFiltersParams, shoppingListParams, mealPlan
 				onClick={() => setMealPlannerDrawerState(true)}
 				startIcon={<ListAltIcon></ListAltIcon>}
 			>
-				Meal Planner {mealPlannerParams.mealPlan.length ? <>({mealPlannerParams.mealPlan.length})</> : null}
+				Meal Planner
 			</DarkRedButton>
 
 			<LightBlueButton

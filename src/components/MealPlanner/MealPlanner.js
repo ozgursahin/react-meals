@@ -5,7 +5,7 @@ import CloseIcon from "@material-ui/icons/Close";
 
 import NutritionDetail from "./NutritionDetail/NutritionDetail";
 import MealPreview from "./MealPreview/MealPreview";
-import PdfExporter from "../UIComponents/PdfExporter/PdfExporter";
+import PdfExporter from "../../helpers/pdf-exporter/PdfExporter";
 import "./MealPlanner.scss";
 
 export default function MealPlanner({ stateParams }) {
@@ -52,7 +52,7 @@ export default function MealPlanner({ stateParams }) {
 
 				<div className="items">
 					{items.map((item, index) => {
-						return <MealPreview key={index} recipeObject={item} removeMeal={removeMeal}></MealPreview>;
+						return <MealPreview key={item.uri} recipeObject={item} removeMeal={removeMeal}></MealPreview>;
 					})}
 				</div>
 

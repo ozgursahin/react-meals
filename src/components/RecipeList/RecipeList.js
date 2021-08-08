@@ -113,19 +113,32 @@ function RecipeList() {
 	 * @param {*} item item to add
 	 */
 	const addToShoppingList = (items) => {
-		setShoppingList([...new Set(shoppingList.concat(items.map((item) => item.toLowerCase())))]);
+		items.forEach(item => {
+			let lowercasedItem = item.toLowerCase();
+			if (shoppingList.indexOf(lowercasedItem) < 0) {
+				shoppingList.push(lowercasedItem);
+			}
+		})
+
+		setShoppingList(shoppingList);
 
 		EventBus.dispatch(shoppingNotificationKey, { message: "Items added to shopping list." });
 	};
+
+	const mealPlanNotificationKey = "mealPlanChanged";
 
 	/**
 	 * Add recipe to meal plan
 	 * @param {*} recipeObject recipe object to add
 	 */
 	const addToMealPlan = (recipeObject) => {
-		let mealIndex = mealPlan.indexOf(recipeObject);
-		if (mealIndex === -1) {
-			setMealPlan(mealPlan.concat(recipeObject));
+		let mealFound = mealPlan.some(recipe => recipeObject.uri === recipe.uri);
+		if (!mealFound) {
+			mealPlan.push(recipeObject);
+			setMealPlan(mealPlan);
+			EventBus.dispatch(mealPlanNotificationKey, { message: "Recipe added to meal plan." });
+		} else {
+			EventBus.dispatch(mealPlanNotificationKey, { message: "Recipe already added to meal plan." });
 		}
 	};
 
@@ -173,16 +186,16 @@ function RecipeList() {
 						<Grid container className={classes.root} spacing={2}>
 							<Grid item xs={12}>
 								<Grid container justifyContent="center" spacing={6}>
-									{loadedRecipes.map((recipe, index) => {
+									{loadedRecipes.map((recipe) => {
 										return (
-											<Grid key={index} item>
+											<Grid key={recipe.recipe.uri} item>
 												<Paper
-													key={index}
+													key={recipe.recipe.uri}
 													className={classes.paper}
 													onClick={() => setSelectedRecipe(recipe)}
 												>
 													<RecipeCard
-														key={index}
+														key={recipe.recipe.uri}
 														recipeObject={recipe.recipe}
 														stateParams={recipeCardParams}
 													></RecipeCard>
@@ -210,7 +223,7 @@ function RecipeList() {
 						></RecipeDetail>
 					) : null}
 
-					<NotificationDisplayer notificationKey={shoppingNotificationKey}></NotificationDisplayer>
+					<NotificationDisplayer notificationKeys={[shoppingNotificationKey, mealPlanNotificationKey]}></NotificationDisplayer>
 				</div>
 			</div>
 		</div>

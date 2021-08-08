@@ -8,7 +8,7 @@ function Alert(props) {
 	return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function NotificationDisplayer({notificationKey}) {
+function NotificationDisplayer({notificationKeys}) {
 	const [isNotificationVisible, setNotificationVisible] = useState(false);
 	const [notificationMessage, setNotificationMessage] = useState("");
 
@@ -22,12 +22,17 @@ function NotificationDisplayer({notificationKey}) {
 	};
 
 	useEffect(() => {
-		EventBus.on(notificationKey, handleNotificationEvent);
-
+		notificationKeys.forEach(notificationKey => {
+			EventBus.on(notificationKey, handleNotificationEvent);
+		});
+		
 		return () => {
-			EventBus.remove(notificationKey, handleNotificationEvent);
+			notificationKeys.forEach(notificationKey => {
+				EventBus.remove(notificationKey, handleNotificationEvent);
+			});
 		};
-	}, [notificationKey]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>
