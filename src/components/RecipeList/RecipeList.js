@@ -33,6 +33,7 @@ function RecipeList() {
 	const PAGE_SIZE = 20;
 	const [loadedRecipes, setLoadedRecipes] = useState([]);
 	const [scrollerIndex, setScrollerIndex] = useState(0);
+	const [scrollerPageIndex, setScrollerPageIndex] = useState(1);
 	const [hasMoreItems, setHasMoreItems] = useState(true);
 	const [isRecipesLoading, setRecipesLoading] = useState(false);
 	const [recipeLoadingError, setRecipeLoadingError] = useState(undefined);
@@ -55,6 +56,7 @@ function RecipeList() {
 		// Reset the infinite scroll states
 		setLoadedRecipes([]);
 		setHasMoreItems(true);
+		setScrollerPageIndex(1);
 		setScrollerIndex(scrollerIndex + 1);
 	};
 
@@ -73,26 +75,28 @@ function RecipeList() {
 
 	/**
 	 * Infinite scroll load method
-	 * @param {*} page infinite scroll page index parameter
-	 * @returns
 	 */
-	const loadItems = function (page) {
-		if (!hasMoreItems) {
+	const loadItems = function () {
+		if (!hasMoreItems || isRecipesLoading) {
 			return;
 		}
 
 		setRecipesLoading(true);
 
-		fetchRecipes(page)
+		console.log("FETCH!: ", scrollerPageIndex);
+
+		fetchRecipes(scrollerPageIndex)
 			.then((incomingRecipes) => {
 				if (incomingRecipes) {
 					if (incomingRecipes.length === 0) {
 						setHasMoreItems(false);
 					} else if (incomingRecipes.length < PAGE_SIZE) {
 						setHasMoreItems(false);
-						setLoadedRecipes(loadedRecipes.concat(incomingRecipes));
+						loadedRecipes.push(...incomingRecipes);
+						setLoadedRecipes(loadedRecipes);
 					} else {
-						setLoadedRecipes(loadedRecipes.concat(incomingRecipes));
+						loadedRecipes.push(...incomingRecipes);
+						setLoadedRecipes(loadedRecipes);
 					}
 				}
 			})
@@ -102,6 +106,7 @@ function RecipeList() {
 				setHasMoreItems(false);
 			})
 			.finally(() => {
+				setScrollerPageIndex(scrollerPageIndex + 1);
 				setRecipesLoading(false);
 			});
 	};
@@ -181,7 +186,8 @@ function RecipeList() {
 					<InfiniteScroll
 						loadMore={loadItems}
 						hasMore={true}
-						className={`${loadedRecipes.length ? "" : "list-not-loaded"}`}
+						threshold={150}
+						className={`is-container ${loadedRecipes.length ? "" : "list-not-loaded"}`}
 					>
 						<Grid container className={classes.root} spacing={2}>
 							<Grid item xs={12}>
@@ -210,9 +216,9 @@ function RecipeList() {
 
 					{isRecipesLoading ? (
 						<LoadingPanel loadingText="loading recipes..."></LoadingPanel>
-					) : loadedRecipes.length ? (
-						null
-					) : <div className="no-results-warning">No results matched your search criteria</div>}
+					) : loadedRecipes.length ? null : (
+						<div className="no-results-warning">No results matched your search criteria</div>
+					)}
 
 					{recipeLoadingError ? <div className="recipe-loading-error">{recipeLoadingError}</div> : null}
 
@@ -222,9 +228,10 @@ function RecipeList() {
 							stateParams={recipeDetailParams}
 						></RecipeDetail>
 					) : null}
-
-					<NotificationDisplayer notificationKeys={[shoppingNotificationKey, mealPlanNotificationKey]}></NotificationDisplayer>
 				</div>
+				<NotificationDisplayer
+					notificationKeys={[shoppingNotificationKey, mealPlanNotificationKey]}
+				></NotificationDisplayer>
 			</div>
 		</div>
 	);

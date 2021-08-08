@@ -5,7 +5,6 @@ $header-height: 70px;
 
 .forms-container {
 	.list-container {
-		min-height: 100vh;
 		display: flex;
 		flex-direction: row;
 
@@ -22,6 +21,10 @@ $header-height: 70px;
 		}
 
 		.list {
+			.is-container {
+				margin-bottom: 1em;
+			}
+			
 			.list-not-loaded {
 				margin-top: -36px;
 			}

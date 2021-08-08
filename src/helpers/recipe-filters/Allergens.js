@@ -10,7 +10,7 @@ export const ALLERGENS = [
 	"Pork-Free",
 	"Shellfish-Free",
 	"Alcohol-Free",
-	"Read-Meat-Free",
+	"Red-Meat-Free",
 	"Fish-Free",
 	"Vegetarian",
 ];
