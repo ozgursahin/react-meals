@@ -34,7 +34,7 @@ export default function MealPlanner({ stateParams }) {
 	};
 
 	return (
-		<Drawer anchor="left" variant="persistent" open={stateParams.mealPlannerDrawerState}>
+		<Drawer anchor="left" variant="persistent" open={stateParams.drawerState}>
 			<div className="meal-planner" id="meal-list">
 				<div className="header">
 					<span className="label">Meal Planner</span>
@@ -42,7 +42,7 @@ export default function MealPlanner({ stateParams }) {
 						className="close-icon"
 						fontSize="large"
 						titleAccess="Close"
-						onClick={() => stateParams.setMealPlannerDrawerState(false)}
+						onClick={() => stateParams.setDrawerState(stateParams.drawerStateKey, false)}
 					/>
 				</div>
 

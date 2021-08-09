@@ -29,7 +29,7 @@ function ShoppingList({ stateParams }) {
 	};
 
 	return (
-		<Drawer anchor="left" variant="persistent" open={stateParams.shoppingListDrawerState}>
+		<Drawer anchor="left" variant="persistent" open={stateParams.drawerState}>
 			<div className="shopping-list">
 				<div className="header">
 					<span className="label">Shopping List</span>
@@ -37,7 +37,7 @@ function ShoppingList({ stateParams }) {
 						className="close-icon"
 						fontSize="large"
 						titleAccess="Close"
-						onClick={() => stateParams.setShoppingListDrawerState(false)}
+						onClick={() => stateParams.setDrawerState(stateParams.drawerStateKey, false)}
 					/>
 				</div>
 

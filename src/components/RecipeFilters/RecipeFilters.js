@@ -10,6 +10,7 @@ import { INGREDIENTS } from "../../helpers/recipe-filters/Ingredients";
 import { MEAL_TYPES } from "../../helpers/recipe-filters/MealTypes";
 import { DISH_TYPES } from "../../helpers/recipe-filters/DishTypes";
 import { CUISINE_TYPES } from "../../helpers/recipe-filters/CuisineTypes";
+
 import ChipSelect from "../UIComponents/ChipSelect/ChipSelect";
 import FilterSlider from "../UIComponents/FilterSlider/FilterSlider";
 
@@ -69,7 +70,7 @@ function RecipeFilters({ stateParams }) {
 	};
 
 	return (
-		<Drawer anchor="left" variant="persistent" open={stateParams.recipeFilterDrawerState}>
+		<Drawer anchor="left" variant="persistent" open={stateParams.drawerState}>
 			<div className="recipe-filters">
 				<div className="header">
 					<span className="label">Recipe Filters</span>
@@ -77,7 +78,7 @@ function RecipeFilters({ stateParams }) {
 						className="close-icon"
 						fontSize="large"
 						titleAccess="Close"
-						onClick={() => stateParams.setRecipeFilterDrawerState(false)}
+						onClick={() => stateParams.setDrawerState(stateParams.drawerStateKey, false)}
 					/>
 				</div>
 
