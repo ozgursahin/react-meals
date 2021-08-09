@@ -1,47 +1,70 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import { GreenButton, RedButton } from "../UIComponents/Buttons/Buttons";
-import { Drawer, Slider, Typography } from "@material-ui/core";
+import { Drawer } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 import "./RecipeFilters.scss";
 
 import { ALLERGENS } from "../../helpers/recipe-filters/Allergens";
 import { INGREDIENTS } from "../../helpers/recipe-filters/Ingredients";
+import { MEAL_TYPES } from "../../helpers/recipe-filters/MealTypes";
+import { DISH_TYPES } from "../../helpers/recipe-filters/DishTypes";
+import { CUISINE_TYPES } from "../../helpers/recipe-filters/CuisineTypes";
 import ChipSelect from "../UIComponents/ChipSelect/ChipSelect";
+import FilterSlider from "../UIComponents/FilterSlider/FilterSlider";
+
+const initialFilters = {
+	selectedAllergens: [],
+	dislikedIngredients: [],
+	selectedMealTypes: [],
+	selectedDishTypes: [],
+	selectedCuisineTypes: [],
+	nutritionFilterIron: 0,
+	nutritionFilterCalc: 0,
+	nutritionFilterVitB12: 0,
+	nutritionFilterVitD: 0,
+};
+
+const filterReducer = (state, action) => {
+	if (action.type === "initial") {
+		return initialFilters;
+	} else if (action.type === "field") {
+		return {
+			...state,
+			[action.fieldName]: action.payload,
+		};
+	} else {
+		throw new Error("filterReducer - action type not found");
+	}
+};
 
 function RecipeFilters({ stateParams }) {
-	const [selectedAllergens, setSelectedAllergens] = useState([]);
-	const [selectedDislikedIngredients, setSelectedDislikedIngredients] = useState([]);
-	const [nutritionFilterIron, setNutritionFilterIron] = useState(0);
-	const [nutritionFilterVitB12, setNutritionFilterVitB12] = useState(0);
+	const [filters, dispatchFilter] = useReducer(filterReducer, initialFilters);
 
-	const nutritionFilterIronChange = (event, newValue) => {
-		setNutritionFilterIron(newValue);
-	};
-
-	const nutritionFilterVitB12Change = (event, newValue) => {
-		setNutritionFilterVitB12(newValue);
+	const setFilter = (fieldName, payload) => {
+		dispatchFilter({ type: "field", fieldName: fieldName, payload: payload });
 	};
 
 	const applyFilters = function () {
-		let filters = {
-			selectedAllergens: selectedAllergens,
-			dislikedIngredients: selectedDislikedIngredients,
+		let filtersObj = {
+			selectedAllergens: filters.selectedAllergens,
+			dislikedIngredients: filters.dislikedIngredients,
+			selectedMealTypes: filters.selectedMealTypes,
+			selectedDishTypes: filters.selectedDishTypes,
+			selectedCuisineTypes: filters.selectedCuisineTypes,
 			ingredientAmounts: {
-				FE: nutritionFilterIron,
-				VITB12: nutritionFilterVitB12,
+				FE: filters.nutritionFilterIron,
+				CA: filters.nutritionFilterCalc,
+				VITB12: filters.nutritionFilterVitB12,
+				VITD: filters.nutritionFilterVitD,
 			},
 		};
 
-		stateParams.applyRecipeFilters(filters);
+		stateParams.applyRecipeFilters(filtersObj);
 	};
 
 	const clearFilters = function () {
-		setSelectedAllergens([]);
-		setSelectedDislikedIngredients([]);
-		setNutritionFilterIron(0);
-		setNutritionFilterVitB12(0);
-
+		dispatchFilter({ type: "initial" });
 		stateParams.applyRecipeFilters({});
 	};
 
@@ -57,60 +80,109 @@ function RecipeFilters({ stateParams }) {
 						onClick={() => stateParams.setRecipeFilterDrawerState(false)}
 					/>
 				</div>
+
 				<div className="filters">
 					<ChipSelect
-						selectionKey="allergen"
+						selectionKey="selectedAllergens"
 						selectionLabel="Allergens"
-						stateParams={{
+						params={{
 							items: ALLERGENS,
-							selectedItems: selectedAllergens,
-							setSelectedItems: setSelectedAllergens,
+							selectedItems: filters.selectedAllergens,
+							setSelectedItems: setFilter,
 						}}
 					></ChipSelect>
 
 					<ChipSelect
-						selectionKey="dislikes"
+						selectionKey="dislikedIngredients"
 						selectionLabel="Disliked Ingredients"
-						stateParams={{
+						params={{
 							items: INGREDIENTS,
-							selectedItems: selectedDislikedIngredients,
-							setSelectedItems: setSelectedDislikedIngredients,
+							selectedItems: filters.dislikedIngredients,
+							setSelectedItems: setFilter,
 						}}
 					></ChipSelect>
 
-					<div className="nutrient-slider-container">
-						<Typography id="iron-slider" gutterBottom>
-							Iron (mg)
-						</Typography>
-						<Slider
-							defaultValue={0}
-							value={nutritionFilterIron}
-							onChange={nutritionFilterIronChange}
-							aria-labelledby="iron-slider"
-							valueLabelDisplay="auto"
-							marks
-							step={1}
-							min={0}
-							max={20}
-						/>
-					</div>
+					<ChipSelect
+						selectionKey="selectedMealTypes"
+						selectionLabel="Meal Types"
+						params={{
+							items: MEAL_TYPES,
+							selectedItems: filters.selectedMealTypes,
+							setSelectedItems: setFilter,
+						}}
+					></ChipSelect>
 
-					<div className="nutrient-slider-container">
-						<Typography id="b12-slider" gutterBottom>
-							Vitamin B12 (µg)
-						</Typography>
-						<Slider
-							defaultValue={0}
-							value={nutritionFilterVitB12}
-							onChange={nutritionFilterVitB12Change}
-							aria-labelledby="b12-slider"
-							valueLabelDisplay="auto"
-							marks
-							step={0.5}
-							min={0}
-							max={50}
-						/>
-					</div>
+					<ChipSelect
+						selectionKey="selectedDishTypes"
+						selectionLabel="Dish Types"
+						params={{
+							items: DISH_TYPES,
+							selectedItems: filters.selectedDishTypes,
+							setSelectedItems: setFilter,
+						}}
+					></ChipSelect>
+
+					<ChipSelect
+						selectionKey="selectedCuisineTypes"
+						selectionLabel="Cuisine Types"
+						params={{
+							items: CUISINE_TYPES,
+							selectedItems: filters.selectedCuisineTypes,
+							setSelectedItems: setFilter,
+						}}
+					></ChipSelect>
+
+					<FilterSlider
+						stateKey="nutritionFilterIron"
+						label="Iron (mg)"
+						sliderOptions={{
+							step: 1,
+							max: 20,
+						}}
+						params={{
+							sliderValue: filters.nutritionFilterIron,
+							setSliderValue: setFilter,
+						}}
+					></FilterSlider>
+					
+					<FilterSlider
+						stateKey="nutritionFilterCalc"
+						label="Calcium (mg)"
+						sliderOptions={{
+							step: 5,
+							max: 1000,
+						}}
+						params={{
+							sliderValue: filters.nutritionFilterCalc,
+							setSliderValue: setFilter,
+						}}
+					></FilterSlider>
+
+					<FilterSlider
+						stateKey="nutritionFilterVitB12"
+						label="Vitamin B12 (µg)"
+						sliderOptions={{
+							step: 0.5,
+							max: 50,
+						}}
+						params={{
+							sliderValue: filters.nutritionFilterVitB12,
+							setSliderValue: setFilter,
+						}}
+					></FilterSlider>
+
+					<FilterSlider
+						stateKey="nutritionFilterVitD"
+						label="Vitamin D (µg)"
+						sliderOptions={{
+							step: 0.5,
+							max: 50,
+						}}
+						params={{
+							sliderValue: filters.nutritionFilterVitD,
+							setSliderValue: setFilter,
+						}}
+					></FilterSlider>
 				</div>
 
 				<div className="buttons">

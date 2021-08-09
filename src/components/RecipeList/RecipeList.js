@@ -83,7 +83,7 @@ function RecipeList() {
 
 		setRecipesLoading(true);
 
-		console.log("FETCH!: ", scrollerPageIndex);
+		console.debug("FETCH PAGE!: ", scrollerPageIndex);
 
 		fetchRecipes(scrollerPageIndex)
 			.then((incomingRecipes) => {

@@ -1,0 +1,16 @@
+$base-color: #963d3d;
+
+.slider-container {
+	padding: 1em 2em;
+	background: #1f2028;
+	margin: 1em 1em;
+	border-radius: 3px;
+
+	.MuiSlider-root {
+		color: lighten($base-color, 10%);
+	}
+
+	.MuiSlider-track {
+		background-color: white;
+	}
+}

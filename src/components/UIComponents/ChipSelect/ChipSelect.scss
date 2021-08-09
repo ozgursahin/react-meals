@@ -1,0 +1,14 @@
+.chip-selection {
+	.form-select-label {
+		font-size: 130%;
+		color: #e2e2e2;
+	}
+
+	.MuiFormLabel-root.Mui-focused {
+		color: white;
+	}
+
+	.MuiInput-underline:after {
+		border-bottom-color: white;
+	}
+}

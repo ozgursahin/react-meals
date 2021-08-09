@@ -2,6 +2,8 @@ import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Chip, FormControl, Input, InputLabel, MenuItem, Select } from "@material-ui/core";
 
+import "./ChipSelect.scss";
+
 const useStyles = makeStyles((theme) => ({
 	control: {
 		padding: theme.spacing(2),
@@ -20,23 +22,23 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function ChipSelect({ selectionKey, selectionLabel, stateParams }) {
+function ChipSelect({ selectionKey, selectionLabel, params }) {
 	const classes = useStyles();
 	const theme = useTheme();
 
 	function getStyles(item, theme) {
 		return {
 			fontWeight:
-				stateParams.selectedItems.indexOf(item) === -1
+				params.selectedItems.indexOf(item) === -1
 					? theme.typography.fontWeightRegular
 					: theme.typography.fontWeightMedium,
-			backgroundColor: stateParams.selectedItems.indexOf(item) === -1 ? "white" : "#963d3d",
-			color: stateParams.selectedItems.indexOf(item) === -1 ? "black" : "white",
+			backgroundColor: params.selectedItems.indexOf(item) === -1 ? "white" : "#963d3d",
+			color: params.selectedItems.indexOf(item) === -1 ? "black" : "white",
 		};
 	}
 
 	const selectedItemsChanged = (event) => {
-		stateParams.setSelectedItems(event.target.value);
+		params.setSelectedItems(selectionKey, event.target.value);
 	};
 
 	return (
@@ -49,7 +51,7 @@ function ChipSelect({ selectionKey, selectionLabel, stateParams }) {
 					labelId={selectionKey + "-select-label"}
 					id={selectionKey + "-select"}
 					multiple
-					value={stateParams.selectedItems}
+					value={params.selectedItems}
 					onChange={selectedItemsChanged}
 					input={<Input id={"select-multiple-" + selectionKey} />}
 					renderValue={(selected) => (
@@ -60,7 +62,7 @@ function ChipSelect({ selectionKey, selectionLabel, stateParams }) {
 						</div>
 					)}
 				>
-					{stateParams.items.map((item) => (
+					{params.items.map((item) => (
 						<MenuItem key={item} value={item} style={getStyles(item, theme)}>
 							{item}
 						</MenuItem>
