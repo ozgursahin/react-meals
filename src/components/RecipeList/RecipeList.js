@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
 import InfiniteScroll from "react-infinite-scroller";
@@ -26,17 +26,55 @@ const useStyles = makeStyles((theme) => ({
 const GET_RECIPES_BY_FILTER_API =
 	"https://us-east-1.aws.webhooks.mongodb-realm.com/api/client/v2.0/app/react-meals-fqsnj/service/ReactMealsHttp/incoming_webhook/getRecipesByFilters?secret=reactmeals89";
 
+const scrollerParamsInitialState = {
+	scrollerIndex: 0,
+	scrollerPageIndex: 1,
+	hasMoreItems: true,
+	isRecipesLoading: false,
+	recipeLoadingError: undefined,
+};
+
+const scrollerParamsReducer = (state, action) => {
+	if (action.type === "filtersApplied") {
+		return {
+			scrollerIndex: state.scrollerIndex + 1,
+			scrollerPageIndex: 1,
+			hasMoreItems: true,
+			isRecipesLoading: false,
+			recipeLoadingError: undefined
+		};
+	} 
+	else if (action.type === "fetchCompleted") {
+		return {
+			...state,
+			hasMoreItems: action.payload.hasMoreItems,
+			recipeLoadingError: action.payload.recipeLoadingError,
+			scrollerPageIndex: action.payload.scrollerPageIndex,
+			isRecipesLoading: action.payload.isRecipesLoading,
+		};
+	} 
+	else if (action.type === "field") {
+		return {
+			...state,
+			[action.fieldName]: action.payload,
+		};
+	} 
+	else {
+		throw new Error("scrollerParamsReducer - action type not found");
+	}
+};
+
 function RecipeList() {
 	const classes = useStyles();
 
 	// Infinite scroll related hooks and variables
 	const PAGE_SIZE = 20;
 	const [loadedRecipes, setLoadedRecipes] = useState([]);
-	const [scrollerIndex, setScrollerIndex] = useState(0);
-	const [scrollerPageIndex, setScrollerPageIndex] = useState(1);
-	const [hasMoreItems, setHasMoreItems] = useState(true);
-	const [isRecipesLoading, setRecipesLoading] = useState(false);
-	const [recipeLoadingError, setRecipeLoadingError] = useState(undefined);
+	const [scrollerParams, dispatchScrollerParams] = useReducer(scrollerParamsReducer, scrollerParamsInitialState);
+
+	const setScrollerParamsState = (fieldName, payload) => {
+		dispatchScrollerParams({ type: "field", fieldName: fieldName, payload: payload });
+	};
 
 	// Recipe filter hooks
 	const [recipeFilters, setRecipeFilters] = useState({});
@@ -52,12 +90,10 @@ function RecipeList() {
 
 	const applyRecipeFilters = (filters) => {
 		setRecipeFilters(filters);
-
-		// Reset the infinite scroll states
 		setLoadedRecipes([]);
-		setHasMoreItems(true);
-		setScrollerPageIndex(1);
-		setScrollerIndex(scrollerIndex + 1);
+		
+		// Reset the infinite scroll states
+		dispatchScrollerParams({type: "filtersApplied"});
 	};
 
 	const fetchRecipes = (page) => {
@@ -77,21 +113,24 @@ function RecipeList() {
 	 * Infinite scroll load method
 	 */
 	const loadItems = function () {
-		if (!hasMoreItems || isRecipesLoading) {
+		if (!scrollerParams.hasMoreItems || scrollerParams.isRecipesLoading) {
 			return;
 		}
 
-		setRecipesLoading(true);
+		setScrollerParamsState("isRecipesLoading", true)
 
-		console.debug("FETCH PAGE!: ", scrollerPageIndex);
+		console.debug("FETCH PAGE!: ", scrollerParams.scrollerPageIndex);
 
+		let hasMoreItems = scrollerParams.hasMoreItems;
+		let errorMessage;
+		let scrollerPageIndex = scrollerParams.scrollerPageIndex;
 		fetchRecipes(scrollerPageIndex)
 			.then((incomingRecipes) => {
 				if (incomingRecipes) {
 					if (incomingRecipes.length === 0) {
-						setHasMoreItems(false);
+						hasMoreItems = false;
 					} else if (incomingRecipes.length < PAGE_SIZE) {
-						setHasMoreItems(false);
+						hasMoreItems = false;
 						loadedRecipes.push(...incomingRecipes);
 						setLoadedRecipes(loadedRecipes);
 					} else {
@@ -99,15 +138,20 @@ function RecipeList() {
 						setLoadedRecipes(loadedRecipes);
 					}
 				}
+				scrollerPageIndex += 1;
 			})
 			.catch(function (error) {
-				setRecipeLoadingError(error.message || error);
+				errorMessage = error.message || error;
 				console.error(error);
-				setHasMoreItems(false);
+				hasMoreItems = false;
 			})
 			.finally(() => {
-				setScrollerPageIndex(scrollerPageIndex + 1);
-				setRecipesLoading(false);
+				dispatchScrollerParams({type: "fetchCompleted", payload: {
+					hasMoreItems: hasMoreItems,
+					recipeLoadingError: errorMessage,
+					scrollerPageIndex: scrollerPageIndex,
+					isRecipesLoading: false
+				}});
 			});
 	};
 
@@ -118,12 +162,12 @@ function RecipeList() {
 	 * @param {*} item item to add
 	 */
 	const addToShoppingList = (items) => {
-		items.forEach(item => {
+		items.forEach((item) => {
 			let lowercasedItem = item.toLowerCase();
 			if (shoppingList.indexOf(lowercasedItem) < 0) {
 				shoppingList.push(lowercasedItem);
 			}
-		})
+		});
 
 		setShoppingList(shoppingList);
 
@@ -137,7 +181,7 @@ function RecipeList() {
 	 * @param {*} recipeObject recipe object to add
 	 */
 	const addToMealPlan = (recipeObject) => {
-		let mealFound = mealPlan.some(recipe => recipeObject.uri === recipe.uri);
+		let mealFound = mealPlan.some((recipe) => recipeObject.uri === recipe.uri);
 		if (!mealFound) {
 			mealPlan.push(recipeObject);
 			setMealPlan(mealPlan);
@@ -182,7 +226,7 @@ function RecipeList() {
 						mealPlannerParams={mealPlannerParams}
 					></RecipeListSidePanel>
 				</div>
-				<div className="list" key={scrollerIndex}>
+				<div className="list" key={scrollerParams.scrollerIndex}>
 					<InfiniteScroll
 						loadMore={loadItems}
 						hasMore={true}
@@ -214,13 +258,13 @@ function RecipeList() {
 						</Grid>
 					</InfiniteScroll>
 
-					{isRecipesLoading ? (
+					{scrollerParams.isRecipesLoading ? (
 						<LoadingPanel loadingText="loading recipes..."></LoadingPanel>
 					) : loadedRecipes.length ? null : (
 						<div className="no-results-warning">No results matched your search criteria</div>
 					)}
 
-					{recipeLoadingError ? <div className="recipe-loading-error">{recipeLoadingError}</div> : null}
+					{scrollerParams.recipeLoadingError ? <div className="recipe-loading-error">{scrollerParams.recipeLoadingError}</div> : null}
 
 					{selectedRecipe ? (
 						<RecipeDetail

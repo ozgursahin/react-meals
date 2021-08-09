@@ -12,7 +12,7 @@ import MealPlanner from "../MealPlanner/MealPlanner";
 const initialDrawerState = {
 	recipeFilterDrawerState: false,
 	shoppingListDrawerState: false,
-	mealPlannerDrawerState: false
+	mealPlannerDrawerState: false,
 };
 
 const drawerReducer = (state, action) => {
